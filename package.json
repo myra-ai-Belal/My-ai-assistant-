@@ -1,0 +1,9 @@
+{
+  "name": "lara-ai-assistant",
+  "version": "0.2.0",
+  "description": "Lara — Bengali-language personal AI voice assistant",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "license": "MIT"
+}
