@@ -1,0 +1,6 @@
+{
+  "appId": "com.chanderpahar.lara",
+  "appName": "Lara",
+  "webDir": ".",
+  "bundledWebRuntime": false
+}
