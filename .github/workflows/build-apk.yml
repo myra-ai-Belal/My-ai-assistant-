@@ -1,0 +1,44 @@
+# build-apk.yml
+# Phase 4 এর জন্য প্রস্তুত রাখা হলো — এখনই কাজ করবে না, কারণ এখনো android/ ফোল্ডার
+# (Capacitor দিয়ে বানানো) রিপোতে যোগ করা হয়নি। Phase 3 শেষ হওয়ার পর এই ফাইল active হবে।
+#
+# workflow_dispatch মানে এটা automatic চলবে না — শুধু GitHub-এর Actions ট্যাব থেকে
+# ম্যানুয়ালি "Run workflow" চাপলেই চলবে। তাই এখনই push করলেও কোনো ভুল/red-cross আসবে না।
+
+name: Build APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Android APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lara-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
