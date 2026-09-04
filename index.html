@@ -6,7 +6,7 @@
 <title>Lara — AI Assistant</title>
 <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
+<body data-theme="aurora">
 
   <div id="app">
 
@@ -16,7 +16,7 @@
       <button id="settingsBtn" class="icon-btn" aria-label="Settings">⚙</button>
     </header>
 
-    <!-- Orb -->
+    <!-- Orb (home screen, call মোড বন্ধ থাকলে দেখা যায়) -->
     <main class="orb-stage">
       <div id="orb" class="orb idle">
         <div class="orb-core"></div>
@@ -24,7 +24,7 @@
         <div class="orb-ring ring2"></div>
         <div class="orb-ring ring3"></div>
       </div>
-      <div id="statusText" class="status-text">চাপুন এবং কথা বলুন</div>
+      <div id="statusText" class="status-text">চাপুন এবং কথা বলুন, অথবা নিচে কল মোড চালু করুন</div>
     </main>
 
     <!-- Conversation log -->
@@ -33,7 +33,7 @@
     <!-- Mic button + Call mode -->
     <footer class="footer">
       <button id="callModeBtn" class="call-mode-btn" aria-label="Call mode">
-        📞 <span id="callModeLabel">কল মোড: বন্ধ</span>
+        📞 <span id="callModeLabel">কল মোড</span>
       </button>
       <button id="micBtn" class="mic-btn" aria-label="Talk">
         <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
@@ -44,6 +44,37 @@
     </footer>
   </div>
 
+  <!-- ===== কল স্ক্রিন (ফোন কলের মতো, 3D চরিত্র সহ) ===== -->
+  <div id="callScreen" class="call-screen hidden">
+    <div class="call-top">
+      <div class="call-name">Lara</div>
+      <div id="callTimer" class="call-timer">00:00</div>
+    </div>
+
+    <div class="avatar-stage">
+      <div id="avatar3d" class="avatar-3d idle">
+        <div class="avatar-halo"></div>
+        <div class="avatar-body">
+          <div class="avatar-face">
+            <div class="eye eye-left"><div class="pupil"></div></div>
+            <div class="eye eye-right"><div class="pupil"></div></div>
+            <div id="avatarMouth" class="mouth"></div>
+          </div>
+          <div class="avatar-shine"></div>
+        </div>
+        <div class="avatar-shadow"></div>
+      </div>
+    </div>
+
+    <div id="callCaption" class="call-caption">কল মোড চালু হচ্ছে...</div>
+
+    <div class="call-controls">
+      <button id="muteBtn" class="call-round-btn" aria-label="Mute">🎤</button>
+      <button id="endCallBtn" class="call-round-btn end" aria-label="End call">📴</button>
+      <button id="speakerBtn" class="call-round-btn" aria-label="Speaker">🔊</button>
+    </div>
+  </div>
+
   <!-- Settings panel -->
   <div id="settingsPanel" class="settings-panel hidden">
     <div class="settings-inner">
@@ -52,9 +83,17 @@
         <button id="closeSettings" class="icon-btn">✕</button>
       </div>
 
+      <div class="section-title">থিম / রঙ</div>
+      <div id="themePicker" class="theme-picker">
+        <button class="theme-swatch" data-theme="aurora" style="background:linear-gradient(135deg,#4fd1ff,#8b5cf6)"></button>
+        <button class="theme-swatch" data-theme="sunset" style="background:linear-gradient(135deg,#ff8a5c,#ff5c7a)"></button>
+        <button class="theme-swatch" data-theme="emerald" style="background:linear-gradient(135deg,#22d3a5,#4fd1ff)"></button>
+        <button class="theme-swatch" data-theme="royal" style="background:linear-gradient(135deg,#f6c453,#8b5cf6)"></button>
+      </div>
+
       <div class="section-title">AI Provider — একাধিক key দিন, একটার লিমিট শেষ হলে পরেরটা automatic try হবে</div>
 
-      <label class="field-label">1️⃣ Groq API Key (এটা প্রথমে try হবে, সবচেয়ে দ্রুত)</label>
+      <label class="field-label">1️⃣ Groq API Key</label>
       <input id="groqKey" type="password" class="field-input" placeholder="gsk_..." />
       <label class="field-label small">Groq মডেল</label>
       <input id="groqModel" type="text" class="field-input" placeholder="openai/gpt-oss-20b" />
@@ -66,7 +105,7 @@
 
       <label class="field-label">3️⃣ OpenRouter API Key</label>
       <input id="openrouterKey" type="password" class="field-input" placeholder="sk-or-..." />
-      <label class="field-label small">OpenRouter মডেল (ফ্রি মডেল যেমন)</label>
+      <label class="field-label small">OpenRouter মডেল (ফ্রি মডেল)</label>
       <input id="openrouterModel" type="text" class="field-input" placeholder="meta-llama/llama-3.3-70b-instruct:free" />
 
       <label class="field-label">4️⃣ OpenAI API Key (থাকলে)</label>
@@ -77,10 +116,10 @@
       <label class="field-label">System Prompt (Lara-র ব্যক্তিত্ব/নিয়ম)</label>
       <textarea id="systemPrompt" class="field-textarea" rows="3"></textarea>
 
-      <label class="field-label">ElevenLabs API Key (ঐচ্ছিক — না দিলে ফোনের ডিফল্ট ভয়েস ব্যবহার হবে)</label>
+      <div class="section-title">ভয়েস</div>
+      <label class="field-label">ElevenLabs API Key (ঐচ্ছিক — realistic ভয়েস)</label>
       <input id="elevenKey" type="password" class="field-input" placeholder="ঐচ্ছিক" />
-
-      <label class="field-label">ElevenLabs Voice ID (ঐচ্ছিক)</label>
+      <label class="field-label small">ElevenLabs Voice ID (ঐচ্ছিক)</label>
       <input id="elevenVoiceId" type="text" class="field-input" placeholder="ঐচ্ছিক" />
 
       <label class="field-label">কথা বলার ভাষা (Speech recognition)</label>
