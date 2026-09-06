@@ -115,12 +115,22 @@
 
       <label class="field-label">System Prompt (Lara-র ব্যক্তিত্ব/নিয়ম)</label>
       <textarea id="systemPrompt" class="field-textarea" rows="3"></textarea>
+      <div id="aiErrorLog" class="tts-error-log"></div>
+      <button id="testAiBtn" class="test-btn">🧠 AI টেস্ট করুন</button>
 
-      <div class="section-title">ভয়েস</div>
-      <label class="field-label">ElevenLabs API Key (ঐচ্ছিক — realistic ভয়েস)</label>
+      <div class="section-title">ভয়েস (TTS) — ক্রম অনুযায়ী try হবে</div>
+      <label class="field-label">1️⃣ ElevenLabs API Key (ফ্রি টিয়ার আছে, মাসে ~১০,০০০ ক্যারেক্টার)</label>
       <input id="elevenKey" type="password" class="field-input" placeholder="ঐচ্ছিক" />
-      <label class="field-label small">ElevenLabs Voice ID (ঐচ্ছিক)</label>
+      <label class="field-label small">ElevenLabs Voice ID</label>
       <input id="elevenVoiceId" type="text" class="field-input" placeholder="ঐচ্ছিক" />
+
+      <label class="field-label">2️⃣ Murf.ai API Key (⚠️ লাইফটাইম ফ্রি না — মাসে $10 ফ্রি ক্রেডিট, পরে টাকা কাটে)</label>
+      <input id="murfKey" type="password" class="field-input" placeholder="ঐচ্ছিক" />
+      <label class="field-label small">Murf Voice ID</label>
+      <input id="murfVoiceId" type="text" class="field-input" placeholder="ঐচ্ছিক (যেমন bn-IN-anwesha)" />
+
+      <div id="ttsErrorLog" class="tts-error-log"></div>
+      <button id="testVoiceBtn" class="test-btn">🔊 ভয়েস টেস্ট করুন</button>
 
       <label class="field-label">কথা বলার ভাষা (Speech recognition)</label>
       <select id="sttLang" class="field-input">
@@ -137,4 +147,5 @@
   <script src="js/config.js"></script>
   <script src="js/app.js"></script>
 </body>
-</html>
+                                                                                                                       </html>
+  
