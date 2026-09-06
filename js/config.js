@@ -7,7 +7,7 @@ const DEFAULT_SETTINGS = {
   groqModel: "openai/gpt-oss-20b",
 
   geminiKey: "",
-  geminiModel: "gemini-2.0-flash",
+  geminiModel: "gemini-3.6-flash",
 
   openrouterKey: "",
   openrouterModel: "meta-llama/llama-3.3-70b-instruct:free",
@@ -21,7 +21,9 @@ const DEFAULT_SETTINGS = {
   elevenVoiceId: "",
 
   murfKey: "",
-  murfVoiceId: "",
+  murfVoiceId: "Ishani",
+  murfModel: "FALCON",
+  murfLocale: "en-US",
 
   sttLang: "bn-BD",
   callMode: false
