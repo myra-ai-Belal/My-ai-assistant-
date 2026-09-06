@@ -414,18 +414,28 @@ async function speakWithElevenLabs(text, settingsObj) {
 }
 
 async function speakWithMurf(text, settingsObj) {
-  const response = await fetch("https://api.murf.ai/v1/speech/generate", {
+  // Mimi.js বট থেকে যাচাই করা কাজ-করা পদ্ধতি — global streaming endpoint,
+  // raw audio bytes ফেরত আসে (JSON/URL না), তাই সরাসরি blob বানানো হয়।
+  const response = await fetch("https://global.api.murf.ai/v1/speech/stream", {
     method: "POST",
     headers: { "api-key": settingsObj.murfKey, "Content-Type": "application/json" },
-    body: JSON.stringify({ text: text, voiceId: settingsObj.murfVoiceId, format: "mp3" })
+    body: JSON.stringify({
+      text: text,
+      voiceId: settingsObj.murfVoiceId || "Ishani",
+      model: settingsObj.murfModel || "FALCON",
+      locale: settingsObj.murfLocale || "en-US",
+      sampleRate: 24000,
+      format: "MP3"
+    })
   });
   if (!response.ok) {
     const errText = await response.text();
     throw new Error(`HTTP ${response.status} — ${errText.slice(0, 150)}`);
   }
-  const data = await response.json();
-  const audioUrl = data.audioFile || data.audio_url || data.url;
-  if (!audioUrl) throw new Error("Murf রেসপন্সে অডিও লিংক পাওয়া যায়নি");
+  const audioBuffer = await response.arrayBuffer();
+  if (audioBuffer.byteLength < 200) throw new Error("Murf থেকে খালি অডিও এসেছে");
+  const blob = new Blob([audioBuffer], { type: "audio/mpeg" });
+  const audioUrl = URL.createObjectURL(blob);
   const audio = new Audio(audioUrl);
   return new Promise((resolve, reject) => {
     audio.onended = resolve;
@@ -439,4 +449,3 @@ window.addEventListener("load", () => {
   applyTheme(settings.theme);
   if (settings.callMode) turnCallModeOn();
 });
-  
