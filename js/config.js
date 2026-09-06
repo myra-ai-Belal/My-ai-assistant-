@@ -20,6 +20,9 @@ const DEFAULT_SETTINGS = {
   elevenKey: "",
   elevenVoiceId: "",
 
+  murfKey: "",
+  murfVoiceId: "",
+
   sttLang: "bn-BD",
   callMode: false
 };
